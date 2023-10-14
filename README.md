@@ -1,8 +1,8 @@
 # cano_map
 
-### get start
+### Getting Started
 
-#### example
+#### Example
 
 ```py
 a, b, c, d = sympy.symbols('a,b,c,d')
