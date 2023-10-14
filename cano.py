@@ -17,9 +17,9 @@ class k_map:
         self.var_nums = len(self.variables)
         self.x = self.var_nums // 2
         self.y = self.var_nums - self.x
-        self.rows = 2 ** self.x
-        self.cols = 2 ** self.y
-        self.all = 2 ** self.var_nums
+        self.rows = 2**self.x
+        self.cols = 2**self.y
+        self.all = 2**self.var_nums
         # 注册，将十进制转化为格雷码
         self.c_bin2gray = k_map._bin2gray(self.cols)
         self.r_bin2gray = k_map._bin2gray(self.rows)
@@ -30,10 +30,10 @@ class k_map:
         self._table_name()
 
     def _table_name(self):
-        x_label_symbol = self.variables[:self.x]
-        y_label_symbol = self.variables[self.x:]
-        self.x_label = ''.join([str(i) for i in x_label_symbol])
-        self.y_label = ''.join([str(i) for i in y_label_symbol])
+        x_label_symbol = self.variables[: self.x]
+        y_label_symbol = self.variables[self.x :]
+        self.x_label = "".join([str(i) for i in x_label_symbol])
+        self.y_label = "".join([str(i) for i in y_label_symbol])
         self.df.index.name = self.x_label
         self.df.columns.name = self.y_label
 
@@ -65,8 +65,8 @@ class k_map:
     def _divide_x_y(self, index: int) -> (str, str):
         # 将index拆分成x和y的格雷码
         index_bin = bin(index)[2:].zfill(self.var_nums)
-        x_index_bin_str = index_bin[:self.x]
-        y_index_bin_str = index_bin[self.x:]
+        x_index_bin_str = index_bin[: self.x]
+        y_index_bin_str = index_bin[self.x :]
         return x_index_bin_str, y_index_bin_str
 
     def _all_marks(self):
@@ -123,7 +123,7 @@ class logic_expr:
 
 if __name__ == "__main__":
     # 运行程序可以改这里
-    a, b, c, d = sympy.symbols('a,b,c,d')
+    a, b, c, d = sympy.symbols("a,b,c,d")
     expr = c | ~b & ~d | ~a & b & d
     my_expr = logic_expr(expr)
     my_expr.show_cano()
