@@ -2,7 +2,7 @@ import sympy
 import copy
 
 
-class FirstImplied:
+class PrimeImplied:
     def __init__(self, min_term: list, vars: list) -> None:
         self.min_term: list = min_term
         self._vars: list = vars
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     min_term = []  # 只有最小项
     for i in range(0, 2 ** len(arr)):
         min_term.append(i)
-        q = FirstImplied(min_term, arr)
+        q = PrimeImplied(min_term, arr)
         implied_arr = q.get_implied()
         print(implied_arr)
     pass
