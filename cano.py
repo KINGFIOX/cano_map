@@ -62,7 +62,7 @@ class k_map:
         # x是ED, y是CBA
         self.df.at[x, y] = value
 
-    def _divide_x_y(self, index: int) -> (str, str):
+    def _divide_x_y(self, index: int) -> (str, str):  # type: ignore
         # 将index拆分成x和y的格雷码
         index_bin = bin(index)[2:].zfill(self.var_nums)
         x_index_bin_str = index_bin[: self.x]
@@ -94,13 +94,13 @@ class logic_expr:
         # 注册
         self._wrap_truth_table()
         # 维护卡诺图
-        self.m_map: k_map = None
+        self.m_map: k_map = None  # type: ignore
         self._wrap_k_map()
 
     def _wrap_truth_table(self) -> None:
         # 维护一个真值表，原本的真值表是不可逆迭代
         temp = []
-        for binary, val in sympy.logic.boolalg.truth_table(self.expr, self.variables):
+        for binary, val in sympy.logic.boolalg.truth_table(self.expr, self.variables):  # type: ignore
             temp.append((binary, val))
             self.truth_table.append(val)
         self.df = pd.DataFrame(temp, columns=["binary", "value"])
