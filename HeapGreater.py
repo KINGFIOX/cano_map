@@ -14,6 +14,9 @@ class HeapGreater:
         self._indexMap: dict = {}  # hash表, obj : index(对象索引下标)
         self._heapSize: int = 0  # 堆的大小
 
+    def __len__(self):
+        return self._heapSize
+
     def isEmpty(self) -> bool:
         return self._heapSize == 0
 
@@ -49,15 +52,10 @@ class HeapGreater:
         del self._indexMap[obj]
         self._heapSize -= 1
         del self._heap[self._heapSize]
-        if obj != replace:
+        if not obj == replace:
             self._heap[index] = replace
             self._indexMap[replace] = index
             self.resign(replace)
-
-    def resign(self, obj) -> None:
-        # val:obj, 向上调整, 向下调整
-        self._heapInsert(self._indexMap[obj])
-        self._heapify(self._indexMap[obj])
 
     def getAllElements(self) -> list:
         # 获得树中的所有元素
@@ -65,6 +63,11 @@ class HeapGreater:
         for c in self._heap:
             ans.append(c)
         return ans
+
+    def resign(self, obj) -> None:
+        # val:obj, 向上调整, 向下调整
+        self._heapInsert(self._indexMap[obj])
+        self._heapify(self._indexMap[obj])
 
     def _heapInsert(self, index: int):
         # 向上调整
@@ -101,12 +104,12 @@ class HeapGreater:
 
 
 if __name__ == "__main__":
-    arr = [i for i in range(0, 20)]
+    arr = [my_int(i) for i in range(0, 20)]
     random.shuffle(arr)
     gth = HeapGreater()
     for i in arr:
         gth.push(i)
     while not gth.isEmpty():
-        print(gth.pop())
+        print(gth.pop().value)
 
     print("hello world")
