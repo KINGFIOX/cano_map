@@ -104,12 +104,4 @@ class HeapGreater:
 
 
 if __name__ == "__main__":
-    arr = [my_int(i) for i in range(0, 20)]
-    random.shuffle(arr)
-    gth = HeapGreater()
-    for i in arr:
-        gth.push(i)
-    while not gth.isEmpty():
-        print(gth.pop().value)
-
     print("hello world")
