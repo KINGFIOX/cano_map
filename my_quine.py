@@ -1,77 +1,79 @@
 from PrimeImplied import PrimeImplied  # 首要蕴含式
 import heapq
 import numpy as np
+import sympy
 
 
 class Quine:
-    def __init__(self, vars, min_term) -> None:
+    def __init__(self, vars: list, min_term: list) -> None:
         self._first_implied_obj = PrimeImplied(vars, min_term)
         self._first_implied_arr = self._first_implied_obj.get_implied()
         self._var_num = len(vars)
-        self._y_size = 2**self._var_num
-        self._x_size = len(self._first_implied_arr)
-        self._map = np.zeros((self._x_size, self._y_size))
+        self._x = []
+        self._first_implied2dig_s()
+        self._x_size = len(self._x)
+        # self._x_size = len(self._first_implied_arr)
+        # self._map = np.zeros((self._x_size, self._y_size))
 
-    def _implied2minterm(self):
-        m_path = ""
-        m_result = []
+    def _first_implied2dig_single(self, text: str) -> list:
+        convertor = ImpliedMintermGenerator(text)
+        return convertor.get_minterms()
 
-        def min_term_util(rest_str: str):
-            if len(rest_str) == 0:
-                # base case
-                m_result.append(m_path)
+    def _first_implied2dig_s(self) -> None:
+        for i in self._first_implied_arr:
+            arr = self._first_implied2dig_single(i)
+            self._x.append(arr)
+
+    # test
+    def test_digs(self):
+        print(self._x)
+        pass
+
+
+class ImpliedMintermGenerator:
+    def __init__(self, text: str) -> None:
+        self._minterms = []
+        self._generate_minterms(text)
+        self._min_terms_dig = []
+        self._bin2num_s()
+
+    def _generate_minterms(self, input_str):
+        def backtrack(path, remaining_str):
+            if not remaining_str:
+                # Base case: Add the current path to the minterms list
+                self._minterms.append(path)
                 return
-            cur_char = rest_str[0]
-            if cur_char == "1":
-                m_path = m_path + "1"
-                min_term_util(rest_str[1:])
-            if cur_char == "0":
-                m_path = m_path + "0"
-                min_term_util(rest_str[1:])
-            else:
-                # cur_char = "-"
-                m_path = m_path + "1"
-                min_term_util(rest_str[1:])
-                m_path = m_path[:-1]
-                m_path = m_path + "0"
-                min_term_util(rest_str[1:])
 
+            current_char = remaining_str[0]
 
-class implied2minterm:
-    def __init__(self, text) -> None:
-        self._m_path = ""
-        self._m_result = []
-        self._min_term_util(text)
+            if current_char == "1":
+                backtrack(path + "1", remaining_str[1:])
+            elif current_char == "0":
+                backtrack(path + "0", remaining_str[1:])
+            elif current_char == "-":
+                # Branch for don't-care values
+                backtrack(path + "1", remaining_str[1:])
+                backtrack(path + "0", remaining_str[1:])
 
-    def _min_term_util(self, rest_str: str):
-        if len(rest_str) == 0:
-            # base case
-            self._m_result.append(self._m_path)
-            return
+        backtrack("", input_str)
 
-        cur_char = rest_str[0]
-        if cur_char == "1":
-            self._m_path = self._m_path + "1"
-            self._min_term_util(rest_str[1:])
-        if cur_char == "0":
-            self._m_path = self._m_path + "0"
-            self._min_term_util(rest_str[1:])
-        if cur_char == "-":
-            m_path = self._m_path + "1"
-            self._min_term_util(rest_str[1:])
-            m_path = m_path[:-1]
-            m_path = m_path + "0"
-            self._min_term_util(rest_str[1:])
+    def _bin2num_single(self, text: str):
+        return int(text, 2)
 
-    def get_result(self):
-        return self._m_result
+    def _bin2num_s(self):
+        for i in self._minterms:
+            temp = self._bin2num_single(i)
+            self._min_terms_dig.append(temp)
+
+    def get_minterms(self):
+        print(self._minterms)
+        print(self._min_terms_dig)
+        return self._min_terms_dig
 
 
 if __name__ == "__main__":
-    str_arr = "11--"
-    arr = implied2minterm(str_arr)
-    print(arr.get_result())
-    print(str_arr)
-    str_arr = str_arr[:-1]
-    print(str_arr)
+    arr = sympy.symbols("a,b,c,d")
+    min_term = [0]
+    q = Quine(arr, min_term)
+    # q.test_digs()
     print("hello world")
